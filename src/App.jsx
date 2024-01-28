@@ -1,18 +1,19 @@
 import React from "react";
-import { Routes, Route } from "react-router-dom";
-import Login from "./components/Login/login";
-import Register from "./components/Register/Register";
+import { Route, Routes } from "react-router-dom";
+import Home from "./components/Home/Home";
+import SignIn from "./components/SignIn/SignIn";
+import ProtectedRoutes from "./protectedRoutes";
 // import Router from "./routes";
 
 function App() {
   return (
     <>
       <Routes>
-        {/* public routes */}
-        <Route path="/sign-in" element={<Login />} />
-        <Route path="/sign-up" element={<Register />} />
+        <Route element={<ProtectedRoutes />}>
+          <Route path="/" element={<Home />} />
+        </Route>
 
-        {/* private routes */}
+        <Route path="/sign-in" element={<SignIn />} />
       </Routes>
     </>
   );
