@@ -1,10 +1,12 @@
+import { Box, Grid, Typography } from "@mui/material";
 import React from "react";
+import { Link } from "react-router-dom";
 
 export default function Footer() {
   return (
     <>
       <footer>
-        {/* <Container>
+        <div style={{ border: "1px solid red" }}>
           <Grid container spacing={5}>
             <Grid item xs={12} sm={4}>
               <Box borderBottom={1}>
@@ -62,12 +64,12 @@ export default function Footer() {
               </Typography>
             </Grid>
           </Grid>
-          <Box textAlign="center" className={classes.trademark}>
+          <Box textAlign="center">
             <Typography>
-              Mediaflix India &reg;{new Date().getFullYear()}
+              Mediatube India &reg;{new Date().getFullYear()}
             </Typography>
           </Box>
-        </Container> */}
+        </div>
       </footer>
     </>
   );

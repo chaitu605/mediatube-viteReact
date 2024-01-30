@@ -7,9 +7,9 @@ export default defineConfig({
     port: 3000,
   },
   plugins: [react()],
-  resolve: {
-    alias: {
-      "@": path.resolve(__dirname, "./src"),
-    },
-  },
+  // resolve: {
+  //   alias: {
+  //     "@": path.resolve(__dirname, "./src"),
+  //   },
+  // },
 });
