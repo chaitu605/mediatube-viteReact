@@ -1,7 +1,9 @@
 import React from "react";
 import { Navigate, Outlet } from "react-router-dom";
+import { useSelector } from "react-redux";
+import Nav from "./components/Nav/Nav";
 
 export default function ProtectedRoutes() {
-  let auth = { token: false };
-  return auth.token ? <Outlet /> : <Navigate to={`/sign-in`} />;
+  const { userInfo } = useSelector((state) => state.userAuth);
+  return <>{userInfo ? <Outlet /> : <Navigate to={`/sign-in`} />}</>;
 }
