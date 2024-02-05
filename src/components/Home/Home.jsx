@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import Banner from "./Banner";
 import Nav from "../Nav/Nav";
-
 import { getAllVideos } from "../../apiServices/videoApis";
 import ButtonLoader from "../Loader/ButtonLoader";
 import Row1 from "./Row1";
@@ -10,8 +9,16 @@ import Row3 from "./Row3";
 import Row4 from "./Row4";
 import Row5 from "./Row5";
 import Row6 from "./Row6";
+import FormControlLabel from "@mui/material/FormControlLabel";
+import Switch from "@mui/material/Switch";
+import { useDispatch, useSelector } from "react-redux";
+import { Container } from "@mui/material";
+import { adminFeaturesReducer } from "../../reduxStore/slices/userAuthSlice";
 
 export default function Home() {
+  let dispatch = useDispatch();
+  const { userInfo, adminFeatures } = useSelector((state) => state.userAuth);
+  const [checked, setChecked] = useState(false);
   // const [loading, setLoading] = useState(false);
   // const [videoData, setVideoData] = useState([]);
   // const [organizedData, setOrganizedData] = useState({});
@@ -41,6 +48,10 @@ export default function Home() {
       items: 1,
       slidesToSlide: 1,
     },
+  };
+
+  const handleChange = (event) => {
+    dispatch(adminFeaturesReducer(event.target.checked));
   };
 
   // useEffect(() => {
@@ -79,13 +90,40 @@ export default function Home() {
           background: "#242424",
         }}
       >
+        {/* <Nav /> */}
         <Banner />
-        <Row1 responsive={responsive} />
-        <Row2 responsive={responsive} />
-        <Row3 responsive={responsive} />
-        <Row4 responsive={responsive} />
-        <Row5 responsive={responsive} />
-        <Row6 responsive={responsive} />
+        {userInfo.isAdmin ? (
+          <Container
+            maxWidth="xl"
+            sx={{
+              display: "flex",
+              justifyContent: "end",
+              marginBottom: "2rem",
+            }}
+          >
+            <FormControlLabel
+              control={
+                <Switch checked={adminFeatures} onChange={handleChange} />
+              }
+              label={`${checked ? `Disable` : `Enable`} Admin Features`}
+            />
+          </Container>
+        ) : null}
+        <Container
+          maxWidth="xl"
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            rowGap: "3rem",
+          }}
+        >
+          <Row1 responsive={responsive} checked={adminFeatures} />
+          <Row2 responsive={responsive} checked={adminFeatures} />
+          <Row3 responsive={responsive} checked={adminFeatures} />
+          <Row4 responsive={responsive} checked={adminFeatures} />
+          <Row5 responsive={responsive} checked={adminFeatures} />
+          <Row6 responsive={responsive} checked={adminFeatures} />
+        </Container>
       </div>
     </>
   );

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import {
   Grid,
   Paper,
@@ -10,11 +10,35 @@ import {
   MenuItem,
   Typography,
   Box,
+  Tooltip,
 } from "@mui/material";
+import { useForm } from "react-hook-form";
 import UploadIcon from "@mui/icons-material/Upload";
+import { toast } from "react-toastify";
+import { addVideo, updateVideo } from "../../apiServices/videoApis";
+import ButtonLoader from "../Loader/ButtonLoader";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 
 export default function EditVideo() {
+  let navigate = useNavigate();
+  const location = useLocation();
+  const { id } = useParams();
+  const { title, description, genre, thumbnail, videoId } = location.state;
   const [loading, setLoading] = useState(false);
+  const [videoData, setVideoData] = useState({
+    title,
+    description,
+    genre,
+    thumbnail,
+    videoId,
+  });
+
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+
   const genres = [
     "Action",
     "Comedy",
@@ -24,26 +48,68 @@ export default function EditVideo() {
     "Drama,Action",
   ];
 
-  const handleInputChange = () => {};
+  const convertToBase64 = (file) => {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onload = () => {
+        resolve(reader.result);
+      };
+      reader.onerror = (error) => {
+        reject(error);
+      };
+      reader.readAsDataURL(file);
+    });
+  };
 
-  const handleSubmit = () => {};
+  const handleInputChange = async (e) => {
+    const { name, value, files } = e.target;
+    if (files && files[0].size > 5000000) {
+      toast.warning(`File size should be less than 5MB`);
+      e.target.value = "";
+      return;
+    }
+    const newValue = files ? await convertToBase64(files[0]) : value;
+    setVideoData((prevValues) => ({ ...prevValues, [name]: newValue }));
+  };
 
-  const submitData = () => {};
+  const submitData = async () => {
+    setLoading(true);
+    const result = await updateVideo(id, videoData);
+
+    if (result.success) {
+      toast.success(`${result.message}`);
+      setVideoData({
+        title: "",
+        description: "",
+        genre: "",
+        thumbnail: "",
+        videoId: "",
+      });
+      navigate("/");
+    } else {
+      toast.error(`${result.message}`);
+    }
+    setLoading(false);
+  };
 
   return (
     <>
-      <Grid
-        container
-        height="100%"
-        justifyContent="center"
-        alignItems="center"
-        border="1px solid red"
+      <div
+        // container
+        style={{
+          backgroundColor: "#242424",
+          display: "flex",
+          height: "100%",
+          justifyContent: "center",
+          alignItems: "center",
+          padding: "0.5rem",
+        }}
       >
         <Paper elevation={20} sx={{ width: 500, padding: "20px 20px" }}>
           <Grid>
             <Box align="center">
               <Typography variant="h4" fontWeight="bold">
-                Update Video
+                Edit Video
               </Typography>
             </Box>
             <form onSubmit={handleSubmit(submitData)}>
@@ -52,80 +118,95 @@ export default function EditVideo() {
                   <TextField
                     color="primary"
                     name="title"
-                    // value={title}
+                    value={videoData.title}
                     id="outlined-basic"
                     label="Title"
                     placeholder="Enter Title"
                     variant="outlined"
                     required
                     fullWidth
+                    onChange={handleInputChange}
                   />
                 </Grid>
                 <Grid item xs={12}>
                   <TextField
                     color="primary"
                     name="description"
-                    // value={description}
+                    value={videoData.description}
                     id="outlined-multiline-static"
                     label="Description"
                     placeholder="Enter description"
                     multiline
-                    rows={2}
+                    rows={3}
                     variant="outlined"
                     required
                     fullWidth
+                    onChange={handleInputChange}
                   />
                 </Grid>
 
                 <Grid item xs={12}>
-                  <FormControl variant="outlined" fullWidth required>
-                    <InputLabel id="demo-simple-select-outlined-label">
-                      Select Genre
-                    </InputLabel>
-                    <Select
-                      name="genre"
-                      color="primary"
-                      labelId="genretype"
-                      id="genre"
-                      label="Select Genre"
-                      displayEmpty
-                    >
-                      {genres.map((item, index) => (
-                        <MenuItem key={index} value={item}>
-                          {item}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
+                  <TextField
+                    fullWidth
+                    id="outlined-select-currency"
+                    select
+                    name="genre"
+                    label="Select Genre"
+                    // defaultValue="Select"
+                    value={videoData.genre}
+                    onChange={handleInputChange}
+                  >
+                    {genres.map((item, index) => (
+                      <MenuItem key={index} value={item}>
+                        {item}
+                      </MenuItem>
+                    ))}
+                  </TextField>
                 </Grid>
                 <Grid item xs={12}>
                   <TextField
+                    disabled
                     color="primary"
                     name="thumbnail"
                     id="outlined-basic"
-                    label="Thumbnail"
-                    type="file"
-                    placeholder="Placeholder"
+                    label="Updating thumbnail is currently not available"
+                    type="text"
+                    // placeholder="Updating thumbnail is currently disabled"
                     variant="outlined"
-                    required
+                    // required
                     fullWidth
-                    InputLabelProps={{
-                      shrink: true,
-                    }}
+                    // InputLabelProps={{
+                    //   shrink: true,
+                    // }}
+                    onChange={handleInputChange}
                   />
                 </Grid>
 
                 <Grid item xs={12}>
-                  <TextField
-                    color="primary"
-                    name="videoId"
-                    id="outlined-basic"
-                    label="VideoId"
-                    placeholder="Enter VideoId"
-                    variant="outlined"
-                    fullWidth
-                    required
-                  />
+                  <Tooltip
+                    placement="top"
+                    title={
+                      <Typography>
+                        Video ID will be located in the URL of the youtube video
+                        page, right after the v= URL parameter. For Example
+                        https://www.youtube.com/watch?v=aqz-KE-bpKQ. In this
+                        case videoId is aqz-KE-bpKQ
+                      </Typography>
+                    }
+                  >
+                    <TextField
+                      color="primary"
+                      name="videoId"
+                      id="outlined-basic"
+                      label="Youtube VideoId"
+                      placeholder="Enter VideoId"
+                      variant="outlined"
+                      fullWidth
+                      required
+                      value={videoData.videoId}
+                      onChange={handleInputChange}
+                    />
+                  </Tooltip>
                 </Grid>
                 <Grid item xs={12}>
                   <Button
@@ -133,16 +214,17 @@ export default function EditVideo() {
                     variant="contained"
                     type="submit"
                     fullWidth
-                    startIcon={<UploadIcon />}
+                    // startIcon={<UploadIcon />}
+                    disabled={loading}
                   >
-                    Upload
+                    {loading ? <ButtonLoader /> : "Update"}
                   </Button>
                 </Grid>
               </Grid>
             </form>
           </Grid>
         </Paper>
-      </Grid>
+      </div>
     </>
   );
 }

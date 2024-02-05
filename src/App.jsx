@@ -10,6 +10,9 @@ import EditVideo from "./components/EditVideo/EditVideo";
 import { createTheme, responsiveFontSizes, ThemeProvider } from "@mui/material";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import VideoPlayer from "./components/VideoPlayer/VideoPlayer";
+import Page404 from "./components/PageNotFound/Page404";
+import AdminElement from "./AdminElement";
 
 // import Router from "./routes";
 
@@ -19,18 +22,34 @@ function App() {
   return (
     <>
       <ThemeProvider theme={theme}>
+        <Nav />
         <Routes>
           <Route element={<ProtectedRoutes />}>
             <Route index path="/" element={<Home />} />
-            <Route path="/add-video" element={<AddVideo />} />
-            <Route path="/edit-video" element={<EditVideo />} />
+            <Route
+              path="/add-video"
+              element={
+                <AdminElement>
+                  <AddVideo />
+                </AdminElement>
+              }
+            />
+            <Route
+              path="/edit-video/:id"
+              element={
+                <AdminElement>
+                  <EditVideo />
+                </AdminElement>
+              }
+            />
+            <Route path="/videoplayer/:id" element={<VideoPlayer />} />
           </Route>
-
           <Route path="/sign-in" element={<SignIn />} />
           <Route path="/sign-up" element={<SignUp />} />
+          <Route path="*" element={<Page404 />} />
         </Routes>
         {/* <Footer /> */}
-        <ToastContainer />
+        <ToastContainer autoClose={2000} newestOnTop closeOnClick />
       </ThemeProvider>
     </>
   );

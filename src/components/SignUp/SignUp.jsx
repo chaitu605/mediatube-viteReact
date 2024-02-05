@@ -9,19 +9,26 @@ import {
   TextField,
   Typography,
   Box,
+  IconButton,
 } from "@mui/material";
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import bgImage from "../../assets/bgImage.jpg";
 import Nav from "../Nav/Nav";
 import { toast } from "react-toastify";
 import { signUp } from "../../apiServices/authApis";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+import ButtonLoader from "../Loader/ButtonLoader";
 
 export default function SignUp() {
+  let navigate = useNavigate();
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
   const [password, setPassword] = useState("");
+  const [visible, setVisible] = useState(false);
+  const [loading, setLoading] = useState(false);
   const {
     register,
     handleSubmit,
@@ -40,19 +47,27 @@ export default function SignUp() {
     }
   };
 
+  const handleVisible = () => {
+    setVisible((prev) => !prev);
+  };
+
   const submitData = async () => {
+    setLoading(true);
     const userData = {
       email: email,
       username: username,
       password: password,
     };
     const result = await signUp(userData);
-    console.log(result);
+
     if (result.success) {
+      toast.dismiss();
+      navigate("/sign-in");
       toast.success(`${result.message}`);
     } else {
       toast.error(`${result.message}`);
     }
+    setLoading(false);
   };
 
   return (
@@ -131,8 +146,15 @@ export default function SignUp() {
                     fullWidth
                     required
                     onChange={handleInputChange}
-                    type="passwprd"
+                    type={visible ? "text" : "password"}
                     name="password"
+                    InputProps={{
+                      endAdornment: (
+                        <IconButton onClick={() => handleVisible()}>
+                          {visible ? <VisibilityIcon /> : <VisibilityOffIcon />}
+                        </IconButton>
+                      ),
+                    }}
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -140,9 +162,10 @@ export default function SignUp() {
                     type="submit"
                     variant="contained"
                     fullWidth
-                    endIcon={<ExitToAppRoundedIcon />}
+                    disabled={loading}
+                    // endIcon={<ExitToAppRoundedIcon />}
                   >
-                    Sign Up
+                    {loading ? <ButtonLoader /> : "Sign Up"}
                   </Button>
                   <div>
                     By signing up, you agree to the

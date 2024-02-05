@@ -1,8 +1,48 @@
-import { AppBar, Button, Toolbar, Typography } from "@mui/material";
-import React from "react";
-import { Link, NavLink } from "react-router-dom";
+import AccountCircle from "@mui/icons-material/AccountCircle";
+import {
+  AppBar,
+  Avatar,
+  Button,
+  IconButton,
+  InputBase,
+  Menu,
+  MenuItem,
+  TextField,
+  Toolbar,
+  Typography,
+} from "@mui/material";
+import React, { useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
+import { logoutReducer } from "../../reduxStore/slices/userAuthSlice";
 
 export default function Nav() {
+  let path = useLocation();
+
+  let navigate = useNavigate();
+  let dispatch = useDispatch();
+  const { userInfo } = useSelector((state) => state.userAuth);
+  const [anchorEl, setAnchorEl] = useState(null);
+
+  const handleMenu = (event) => {
+    setAnchorEl(event.currentTarget);
+  };
+
+  const handleClose = () => {
+    setAnchorEl(null);
+  };
+
+  const handleAdd = () => {
+    navigate("/add-video");
+    handleClose();
+  };
+
+  const handleLogout = () => {
+    dispatch(logoutReducer());
+    handleClose();
+    navigate("/");
+  };
+
   return (
     <>
       <AppBar
@@ -10,8 +50,8 @@ export default function Nav() {
         sx={{
           position: "absolute",
           height: "55px",
-          background: "transparent",
-          backgroundColor: "rgba(37, 37, 37, 0.35)",
+          background: "none",
+          // backgroundColor: "rgba(37, 37, 37, 0.35)",
         }}
       >
         <Toolbar>
@@ -31,10 +71,70 @@ export default function Nav() {
               />
             </NavLink>
           </div>
-          <Typography>
-            {/* <Button color="inherit">Home</Button> */}
-            <Button variant="contained">Sign In</Button>
-          </Typography>
+
+          <div>
+            {userInfo === null ? (
+              path.pathname !== "/sign-in" ? (
+                <Link to={"/sign-in"}>
+                  <Button variant="contained">Sign In</Button>
+                </Link>
+              ) : null
+            ) : (
+              <>
+                <Link to={"/"}>
+                  <Button variant="outlined">Home</Button>
+                </Link>
+                <IconButton
+                  size="large"
+                  aria-label="account of current user"
+                  aria-controls="menu-appbar"
+                  aria-haspopup="true"
+                  onClick={handleMenu}
+                  color="inherit"
+                >
+                  <Avatar>{userInfo?.username.charAt(0).toUpperCase()}</Avatar>
+                </IconButton>
+              </>
+            )}
+
+            <Menu
+              id="menu-appbar"
+              anchorEl={anchorEl}
+              anchorOrigin={{
+                vertical: "bottom",
+                horizontal: "right",
+              }}
+              keepMounted
+              transformOrigin={{
+                vertical: "top",
+                horizontal: "right",
+              }}
+              open={Boolean(anchorEl)}
+              onClose={handleClose}
+              MenuListProps={{ dense: true }}
+              PaperProps={{
+                sx: {
+                  backgroundColor: "#242424", // Set the desired background color
+                },
+              }}
+            >
+              {userInfo?.isAdmin ? (
+                <MenuItem
+                  sx={{ backgroundColor: "#242424", color: "white" }}
+                  onClick={handleAdd}
+                >
+                  Add Video
+                </MenuItem>
+              ) : null}
+
+              <MenuItem
+                sx={{ backgroundColor: "#242424", color: "white" }}
+                onClick={handleLogout}
+              >
+                Logout
+              </MenuItem>
+            </Menu>
+          </div>
         </Toolbar>
       </AppBar>
     </>

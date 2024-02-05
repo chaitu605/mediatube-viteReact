@@ -4,6 +4,7 @@ import {
   Avatar,
   Button,
   Grid,
+  IconButton,
   Paper,
   TextField,
   Typography,
@@ -17,6 +18,9 @@ import { signIn } from "../../apiServices/authApis";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import { loginReducer } from "../../reduxStore/slices/userAuthSlice";
+import VisibilityIcon from "@mui/icons-material/Visibility";
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+import ButtonLoader from "../Loader/ButtonLoader";
 
 export default function SignIn() {
   let dispatch = useDispatch();
@@ -24,6 +28,8 @@ export default function SignIn() {
   const { userInfo } = useSelector((state) => state.userAuth);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [visible, setVisible] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   const {
     register,
@@ -44,19 +50,26 @@ export default function SignIn() {
     } else setPassword(value);
   };
 
+  const handleVisible = () => {
+    setVisible((prev) => !prev);
+  };
+
   const submitData = async (e) => {
+    setLoading(true);
     const userData = {
-      email: "admin@gmail.com",
-      password: "Admin@123",
+      email: email,
+      password: password,
     };
     const result = await signIn(userData);
-    console.log(result);
+
     if (result.success) {
+      toast.dismiss();
       dispatch(loginReducer(result.data));
       toast.success(`${result.message}`);
     } else {
       toast.error(`${result.message}`);
     }
+    setLoading(false);
   };
 
   return (
@@ -100,6 +113,7 @@ export default function SignIn() {
                 </Grid>
                 <Grid item xs={12}>
                   <TextField
+                    autoComplete="off"
                     label="Email"
                     variant="outlined"
                     fullWidth
@@ -111,21 +125,34 @@ export default function SignIn() {
                 </Grid>
                 <Grid item xs={12}>
                   <TextField
+                    autoComplete="off"
                     label="Password"
                     variant="outlined"
                     fullWidth
                     required
                     onChange={handleInputChange}
-                    type="password"
+                    type={visible ? "text" : "password"}
                     name="password"
+                    InputProps={{
+                      endAdornment: (
+                        <IconButton onClick={() => handleVisible()}>
+                          {visible ? <VisibilityIcon /> : <VisibilityOffIcon />}
+                        </IconButton>
+                      ),
+                    }}
                   />
                 </Grid>
                 <Grid item xs={12}>
-                  <Button type="submit" variant="contained" fullWidth>
-                    Sign In
-                    <span>
+                  <Button
+                    type="submit"
+                    variant="contained"
+                    disabled={loading}
+                    fullWidth
+                  >
+                    {loading ? <ButtonLoader /> : "Sign In"}
+                    {/* <span>
                       <LockOpenIcon />
-                    </span>
+                    </span> */}
                   </Button>
                 </Grid>
                 <Grid item xs={12}>

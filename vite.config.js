@@ -7,9 +7,9 @@ export default defineConfig({
     port: 3000,
   },
   plugins: [react()],
-  // resolve: {
-  //   alias: {
-  //     "@": path.resolve(__dirname, "./src"),
-  //   },
-  // },
+
+  resolve: {
+    // for react-moment pkg to solve undefined format error
+    mainFields: [],
+  },
 });

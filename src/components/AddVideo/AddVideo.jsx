@@ -10,14 +10,17 @@ import {
   MenuItem,
   Typography,
   Box,
+  Tooltip,
 } from "@mui/material";
 import { useForm } from "react-hook-form";
 import UploadIcon from "@mui/icons-material/Upload";
 import { toast } from "react-toastify";
 import { addVideo } from "../../apiServices/videoApis";
 import ButtonLoader from "../Loader/ButtonLoader";
+import { useNavigate } from "react-router-dom";
 
 export default function AddVideo() {
+  let navigate = useNavigate();
   const [loading, setLoading] = useState(false);
   const [videoData, setVideoData] = useState({
     title: "",
@@ -69,10 +72,17 @@ export default function AddVideo() {
   const submitData = async () => {
     setLoading(true);
     const result = await addVideo(videoData);
-    console.log(result);
 
     if (result.success) {
       toast.success(`${result.message}`);
+      setVideoData({
+        title: "",
+        description: "",
+        genre: "",
+        thumbnail: "",
+        videoId: "",
+      });
+      navigate("/");
     } else {
       toast.error(`${result.message}`);
     }
@@ -81,7 +91,16 @@ export default function AddVideo() {
 
   return (
     <>
-      <Grid container height="100%" justifyContent="center" alignItems="center">
+      <div
+        style={{
+          backgroundColor: "#242424",
+          display: "flex",
+          height: "100%",
+          justifyContent: "center",
+          alignItems: "center",
+          padding: "0.5rem",
+        }}
+      >
         <Paper elevation={20} sx={{ width: 500, padding: "20px 20px" }}>
           <Grid>
             <Box align="center">
@@ -159,17 +178,29 @@ export default function AddVideo() {
                 </Grid>
 
                 <Grid item xs={12}>
-                  <TextField
-                    color="primary"
-                    name="videoId"
-                    id="outlined-basic"
-                    label="VideoId"
-                    placeholder="Enter VideoId"
-                    variant="outlined"
-                    fullWidth
-                    required
-                    onChange={handleInputChange}
-                  />
+                  <Tooltip
+                    placement="top"
+                    title={
+                      <Typography>
+                        Video ID will be located in the URL of the youtube video
+                        page, right after the v= URL parameter. For Example
+                        https://www.youtube.com/watch?v=aqz-KE-bpKQ. In this
+                        case videoId is aqz-KE-bpKQ
+                      </Typography>
+                    }
+                  >
+                    <TextField
+                      color="primary"
+                      name="videoId"
+                      id="outlined-basic"
+                      label="VideoId"
+                      placeholder="Enter VideoId"
+                      variant="outlined"
+                      fullWidth
+                      required
+                      onChange={handleInputChange}
+                    />
+                  </Tooltip>
                 </Grid>
                 <Grid item xs={12}>
                   <Button
@@ -187,7 +218,7 @@ export default function AddVideo() {
             </form>
           </Grid>
         </Paper>
-      </Grid>
+      </div>
     </>
   );
 }
