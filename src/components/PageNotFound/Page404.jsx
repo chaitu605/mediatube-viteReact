@@ -32,7 +32,7 @@ export default function Page404() {
             alt={"404Image"}
           />
         </div>
-        <Link to={"/"}>
+        <Link to={"/home"}>
           <Button variant="outlined">Back To Home</Button>
         </Link>
       </div>

@@ -24,10 +24,10 @@ function App() {
       <ThemeProvider theme={theme}>
         <Nav />
         <Routes>
-          <Route path="/signin" element={<SignIn />} />
-          <Route path="/signup" element={<SignUp />} />
-          <Route path="/" element={<ProtectedRoutes />}>
-            <Route path="/" element={<Home />} />
+          <Route path="/sign-in" element={<SignIn />} />
+          <Route path="/sign-up" element={<SignUp />} />
+          <Route element={<ProtectedRoutes />}>
+            <Route path="/home" element={<Home />} />
             <Route
               path="/add-video"
               element={

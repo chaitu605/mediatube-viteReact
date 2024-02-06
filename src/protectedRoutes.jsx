@@ -5,5 +5,5 @@ import Nav from "./components/Nav/Nav";
 
 export default function ProtectedRoutes() {
   const { userInfo } = useSelector((state) => state.userAuth);
-  return <>{userInfo !== null ? <Outlet /> : <Navigate to={`/signin`} />}</>;
+  return <>{userInfo !== null ? <Outlet /> : <Navigate to={`/sign-in`} />}</>;
 }
