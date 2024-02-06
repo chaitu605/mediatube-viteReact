@@ -24,8 +24,10 @@ function App() {
       <ThemeProvider theme={theme}>
         <Nav />
         <Routes>
+          <Route path="/sign-in" element={<SignIn />} />
+          <Route path="/sign-up" element={<SignUp />} />
           <Route element={<ProtectedRoutes />}>
-            <Route index path="/" element={<Home />} />
+            <Route path="/" element={<Home />} />
             <Route
               path="/add-video"
               element={
@@ -44,8 +46,6 @@ function App() {
             />
             <Route path="/videoplayer/:id" element={<VideoPlayer />} />
           </Route>
-          <Route path="/sign-in" element={<SignIn />} />
-          <Route path="/sign-up" element={<SignUp />} />
           <Route path="*" element={<Page404 />} />
         </Routes>
         {/* <Footer /> */}
