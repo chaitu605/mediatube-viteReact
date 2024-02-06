@@ -27,7 +27,7 @@ function App() {
           <Route path="/sign-in" element={<SignIn />} />
           <Route path="/sign-up" element={<SignUp />} />
           <Route element={<ProtectedRoutes />}>
-            <Route path="/home" element={<Home />} />
+            <Route path="/" element={<Home />} />
             <Route
               path="/add-video"
               element={
