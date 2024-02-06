@@ -22,6 +22,7 @@ export default function Comment(props) {
   } = useForm();
   const user = useSelector((state) => state.userAuth);
   const [comment, setComment] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     e.preventDefault();
@@ -30,6 +31,7 @@ export default function Comment(props) {
   };
 
   const onSubmit = async (e) => {
+    setLoading(true);
     const variables = {
       comment: comment,
       writer: user.userInfo.userId,
@@ -41,6 +43,8 @@ export default function Comment(props) {
     if (postComment.success) {
       props.refreshFunction(postComment.data);
     }
+    setLoading(false);
+    setComment("");
   };
 
   return (
@@ -63,7 +67,7 @@ export default function Comment(props) {
                   />
                 ),
                 endAdornment: (
-                  <Button type="submit">
+                  <Button disabled={loading} type="submit">
                     <Typography>Post</Typography>
                   </Button>
                 ),

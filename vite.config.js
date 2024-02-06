@@ -10,6 +10,6 @@ export default defineConfig({
 
   resolve: {
     // for react-moment pkg to solve undefined format error
-    mainFields: [],
+    mainFields: ["browser"],
   },
 });
