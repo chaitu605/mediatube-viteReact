@@ -52,7 +52,7 @@ export default function Banner() {
           backgroundRepeat: "no-repeat",
           // backgroundSize: "cover",
           position: "relative",
-          marginBottom: "3rem",
+          // marginBottom: "3rem",
           paddingBottom: "2rem",
           display: "flex",
           flexDirection: "column",

@@ -97,7 +97,6 @@ export default function EditVideo() {
       <div
         // container
         style={{
-          backgroundColor: "#242424",
           display: "flex",
           height: "100%",
           justifyContent: "center",

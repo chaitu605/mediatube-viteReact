@@ -112,7 +112,6 @@ export default function VideoPlayer() {
       <div
         style={{
           height: "100%",
-          background: "#242424",
           display: "flex",
           justifyContent: "center",
         }}

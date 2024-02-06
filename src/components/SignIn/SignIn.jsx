@@ -77,103 +77,113 @@ export default function SignIn() {
       <div
         style={{
           height: "100%",
-          background: "rgba(0, 0, 0, 0.6)",
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "center",
+          backgroundImage: `url(${bgImage})`,
         }}
       >
-        <Nav />
-
-        <Grid
-          container
-          // height="100%"
-          align="center"
-          justifyContent="center"
-          alignItems="center"
+        <div
+          style={{
+            height: "100%",
+            background: "rgba(0, 0, 0, 0.6)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+          }}
         >
-          <Paper
-            elevation={20}
-            sx={{
-              height: "100%",
-              maxWidth: 400,
-              opacity: "75%",
-              padding: "20px 20px",
-            }}
+          <Nav />
+          <Grid
+            container
+            // height="100%"
+            align="center"
+            justifyContent="center"
+            alignItems="center"
           >
-            <form onSubmit={handleSubmit(submitData)}>
-              <Grid container rowSpacing={2}>
-                <Grid item xs={12}>
-                  <Avatar>
-                    <LockIcon />
-                  </Avatar>
-                  <Typography variant="h4" fontWeight="bold">
-                    Sign In
-                  </Typography>
-                </Grid>
-                <Grid item xs={12}>
-                  <TextField
-                    autoComplete="off"
-                    label="Email"
-                    variant="outlined"
-                    fullWidth
-                    required
-                    onChange={handleInputChange}
-                    type="email"
-                    name="email"
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <TextField
-                    autoComplete="off"
-                    label="Password"
-                    variant="outlined"
-                    fullWidth
-                    required
-                    onChange={handleInputChange}
-                    type={visible ? "text" : "password"}
-                    name="password"
-                    InputProps={{
-                      endAdornment: (
-                        <IconButton onClick={() => handleVisible()}>
-                          {visible ? <VisibilityIcon /> : <VisibilityOffIcon />}
-                        </IconButton>
-                      ),
-                    }}
-                  />
-                </Grid>
-                <Grid item xs={12}>
-                  <Button
-                    type="submit"
-                    variant="contained"
-                    disabled={loading}
-                    fullWidth
-                  >
-                    {loading ? <ButtonLoader /> : "Sign In"}
-                    {/* <span>
+            <Paper
+              elevation={20}
+              sx={{
+                height: "100%",
+                maxWidth: 400,
+                opacity: "75%",
+                padding: "20px 20px",
+              }}
+            >
+              <form onSubmit={handleSubmit(submitData)}>
+                <Grid container rowSpacing={2}>
+                  <Grid item xs={12}>
+                    <Avatar>
+                      <LockIcon />
+                    </Avatar>
+                    <Typography variant="h4" fontWeight="bold">
+                      Sign In
+                    </Typography>
+                  </Grid>
+                  <Grid item xs={12}>
+                    <TextField
+                      autoComplete="off"
+                      label="Email"
+                      variant="outlined"
+                      fullWidth
+                      required
+                      onChange={handleInputChange}
+                      type="email"
+                      name="email"
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <TextField
+                      autoComplete="off"
+                      label="Password"
+                      variant="outlined"
+                      fullWidth
+                      required
+                      onChange={handleInputChange}
+                      type={visible ? "text" : "password"}
+                      name="password"
+                      InputProps={{
+                        endAdornment: (
+                          <IconButton onClick={() => handleVisible()}>
+                            {visible ? (
+                              <VisibilityIcon />
+                            ) : (
+                              <VisibilityOffIcon />
+                            )}
+                          </IconButton>
+                        ),
+                      }}
+                    />
+                  </Grid>
+                  <Grid item xs={12}>
+                    <Button
+                      type="submit"
+                      variant="contained"
+                      disabled={loading}
+                      fullWidth
+                    >
+                      {loading ? <ButtonLoader /> : "Sign In"}
+                      {/* <span>
                       <LockOpenIcon />
                     </span> */}
-                  </Button>
-                </Grid>
-                <Grid item xs={12}>
-                  <Typography>
-                    New to <span>MEDIATUBE</span> ?
-                    <span>
-                      {" "}
-                      <Link
-                        style={{ fontWeight: "bold", color: "inherit" }}
-                        to="/sign-up"
-                      >
+                    </Button>
+                  </Grid>
+                  <Grid item xs={12}>
+                    <Typography>
+                      New to <span>MEDIATUBE</span> ?
+                      <span>
                         {" "}
-                        Sign Up now.
-                      </Link>
-                    </span>
-                  </Typography>
+                        <Link
+                          style={{ fontWeight: "bold", color: "inherit" }}
+                          to="/sign-up"
+                        >
+                          {" "}
+                          Sign Up now.
+                        </Link>
+                      </span>
+                    </Typography>
+                  </Grid>
                 </Grid>
-              </Grid>
-            </form>
-          </Paper>
-        </Grid>
+              </form>
+            </Paper>
+          </Grid>
+        </div>
       </div>
     </>
   );

@@ -9,10 +9,6 @@ export default function Page404() {
       <div
         style={{
           height: "100%",
-          backgroundColor: "#242424",
-          // backgroundImage: `url(${page404})`,
-          // backgroundSize: "cover",
-          // backgroundRepeat: "no-repeat",
           display: "flex",
           flexDirection: "column",
           rowGap: "1rem",

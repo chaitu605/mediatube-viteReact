@@ -84,47 +84,37 @@ export default function Home() {
 
   return (
     <>
-      <div
-        style={{
-          height: "100%",
-          background: "#242424",
-        }}
-      >
-        {/* <Nav /> */}
-        <Banner />
-        {userInfo.isAdmin ? (
-          <Container
-            maxWidth="xl"
-            sx={{
-              display: "flex",
-              justifyContent: "end",
-              marginBottom: "2rem",
-            }}
-          >
-            <FormControlLabel
-              control={
-                <Switch checked={adminFeatures} onChange={handleChange} />
-              }
-              label={`${checked ? `Disable` : `Enable`} Admin Features`}
-            />
-          </Container>
-        ) : null}
+      <Banner />
+      {userInfo.isAdmin ? (
         <Container
           maxWidth="xl"
           sx={{
             display: "flex",
-            flexDirection: "column",
-            rowGap: "3rem",
+            justifyContent: "end",
+            marginBottom: "2rem",
           }}
         >
-          <Row1 responsive={responsive} checked={adminFeatures} />
-          <Row2 responsive={responsive} checked={adminFeatures} />
-          <Row3 responsive={responsive} checked={adminFeatures} />
-          <Row4 responsive={responsive} checked={adminFeatures} />
-          <Row5 responsive={responsive} checked={adminFeatures} />
-          <Row6 responsive={responsive} checked={adminFeatures} />
+          <FormControlLabel
+            control={<Switch checked={adminFeatures} onChange={handleChange} />}
+            label={`${checked ? `Disable` : `Enable`} Admin Features`}
+          />
         </Container>
-      </div>
+      ) : null}
+      <Container
+        maxWidth="xl"
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+          rowGap: "3rem",
+        }}
+      >
+        <Row1 responsive={responsive} checked={adminFeatures} />
+        <Row2 responsive={responsive} checked={adminFeatures} />
+        <Row3 responsive={responsive} checked={adminFeatures} />
+        <Row4 responsive={responsive} checked={adminFeatures} />
+        <Row5 responsive={responsive} checked={adminFeatures} />
+        <Row6 responsive={responsive} checked={adminFeatures} />
+      </Container>
     </>
   );
 }
