@@ -73,9 +73,17 @@ export default function EditVideo() {
   };
 
   const submitData = async () => {
+    const parts = thumbnail.split("/");
+    const index = parts.indexOf("thumbnails");
+    if (index !== -1 && index + 1 < parts.length) {
+      // extracted id frm thumbnail url and removed .jpg extension for cloudinary publicID
+      videoData.cloudinaryImgId = parts
+        .slice(index, index + 2)
+        .join("/")
+        .split(".")[0];
+    }
     setLoading(true);
     const result = await updateVideo(id, videoData);
-
     if (result.success) {
       toast.success(`${result.message}`);
       setVideoData({
@@ -164,19 +172,19 @@ export default function EditVideo() {
                 </Grid>
                 <Grid item xs={12}>
                   <TextField
-                    disabled
+                    // disabled
                     color="primary"
                     name="thumbnail"
                     id="outlined-basic"
-                    label="Updating thumbnail is currently not available"
-                    type="text"
+                    label="Thumbnail"
+                    type="file"
                     // placeholder="Updating thumbnail is currently disabled"
                     variant="outlined"
                     // required
                     fullWidth
-                    // InputLabelProps={{
-                    //   shrink: true,
-                    // }}
+                    InputLabelProps={{
+                      shrink: true,
+                    }}
                     onChange={handleInputChange}
                   />
                 </Grid>

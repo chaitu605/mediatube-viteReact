@@ -144,6 +144,7 @@ export default function Row1({ responsive, checked }) {
                     }
                     src={item.thumbnail}
                     alt={item.title}
+                    loading="lazy"
                   />
                 </Link>
               </div>

@@ -3,10 +3,11 @@ import { Container, IconButton, Typography } from "@mui/material";
 import Carousel from "react-multi-carousel";
 import "react-multi-carousel/lib/styles.css";
 import ButtonLoader from "../Loader/ButtonLoader";
-import { getVideosByGenre } from "../../apiServices/videoApis";
+import { deleteVideo, getVideosByGenre } from "../../apiServices/videoApis";
 import EditIcon from "@mui/icons-material/Edit";
 import DeleteIcon from "@mui/icons-material/Delete";
 import { Link } from "react-router-dom";
+import { toast } from "react-toastify";
 
 export default function Row3({ responsive, checked }) {
   const [videos, setVideos] = useState([]);
@@ -132,6 +133,7 @@ export default function Row3({ responsive, checked }) {
                     }
                     src={item.thumbnail}
                     alt={item.title}
+                    loading="lazy"
                   />
                 </Link>
               </div>
