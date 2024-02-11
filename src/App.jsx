@@ -16,7 +16,7 @@ import AdminElement from "./AdminElement";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 import About from "./components/About/About";
 
-// import Router from "./routes";
+const googleClientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
 
 function App() {
   let theme = createTheme();
@@ -24,7 +24,7 @@ function App() {
   return (
     <>
       <ThemeProvider theme={theme}>
-        <GoogleOAuthProvider clientId="185836464547-ldcsecdjqsdhkgheft2vvp32ruhne3ic.apps.googleusercontent.com">
+        <GoogleOAuthProvider clientId={`${googleClientId}`}>
           <Nav />
           <Routes>
             <Route path="/sign-in" element={<SignIn />} />
