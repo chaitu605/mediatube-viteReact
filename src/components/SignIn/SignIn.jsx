@@ -14,13 +14,16 @@ import { useForm } from "react-hook-form";
 import { Link, useNavigate } from "react-router-dom";
 import bgImage from "../../assets/bgImage.jpg";
 import Nav from "../Nav/Nav";
-import { signIn } from "../../apiServices/authApis";
+import { googleSignIn, signIn } from "../../apiServices/authApis";
 import { toast } from "react-toastify";
 import { useDispatch, useSelector } from "react-redux";
 import { loginReducer } from "../../reduxStore/slices/userAuthSlice";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 import ButtonLoader from "../Loader/ButtonLoader";
+import { GoogleLogin } from "@react-oauth/google";
+import { useGoogleLogin } from "@react-oauth/google";
+import axios from "axios";
 
 export default function SignIn() {
   let dispatch = useDispatch();
@@ -53,6 +56,14 @@ export default function SignIn() {
   const handleVisible = () => {
     setVisible((prev) => !prev);
   };
+
+  // const googleLogin = useGoogleLogin({
+  //   onSuccess: async (tokenResponse) => {
+  //     const userInfo = await googleSignIn(tokenResponse.access_token);
+  //     console.log("usoF", userInfo);
+  //   },
+  //   onError: (errorResponse) => console.log(errorResponse),
+  // });
 
   const submitData = async (e) => {
     setLoading(true);
@@ -164,6 +175,15 @@ export default function SignIn() {
                     </span> */}
                     </Button>
                   </Grid>
+                  {/* <Grid item xs={12}>
+                    <Button
+                      variant="contained"
+                      fullWidth
+                      onClick={() => googleLogin()}
+                    >
+                      Google Login
+                    </Button>
+                  </Grid> */}
                   <Grid item xs={12}>
                     <Typography>
                       New to <span>MEDIATUBE</span> ?

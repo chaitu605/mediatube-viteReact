@@ -13,6 +13,8 @@ import "react-toastify/dist/ReactToastify.css";
 import VideoPlayer from "./components/VideoPlayer/VideoPlayer";
 import Page404 from "./components/PageNotFound/Page404";
 import AdminElement from "./AdminElement";
+import { GoogleOAuthProvider } from "@react-oauth/google";
+import About from "./components/About/About";
 
 // import Router from "./routes";
 
@@ -22,34 +24,37 @@ function App() {
   return (
     <>
       <ThemeProvider theme={theme}>
-        <Nav />
-        <Routes>
-          <Route path="/sign-in" element={<SignIn />} />
-          <Route path="/sign-up" element={<SignUp />} />
-          <Route element={<ProtectedRoutes />}>
-            <Route path="/" element={<Home />} />
-            <Route
-              path="/add-video"
-              element={
-                <AdminElement>
-                  <AddVideo />
-                </AdminElement>
-              }
-            />
-            <Route
-              path="/edit-video/:id"
-              element={
-                <AdminElement>
-                  <EditVideo />
-                </AdminElement>
-              }
-            />
-            <Route path="/videoplayer/:id" element={<VideoPlayer />} />
-          </Route>
-          <Route path="*" element={<Page404 />} />
-        </Routes>
-        {/* <Footer /> */}
-        <ToastContainer autoClose={2000} newestOnTop closeOnClick />
+        <GoogleOAuthProvider clientId="185836464547-ldcsecdjqsdhkgheft2vvp32ruhne3ic.apps.googleusercontent.com">
+          <Nav />
+          <Routes>
+            <Route path="/sign-in" element={<SignIn />} />
+            <Route path="/sign-up" element={<SignUp />} />
+            <Route path="/about" element={<About />} />
+            <Route element={<ProtectedRoutes />}>
+              <Route path="/" element={<Home />} />
+              <Route
+                path="/add-video"
+                element={
+                  <AdminElement>
+                    <AddVideo />
+                  </AdminElement>
+                }
+              />
+              <Route
+                path="/edit-video/:id"
+                element={
+                  <AdminElement>
+                    <EditVideo />
+                  </AdminElement>
+                }
+              />
+              <Route path="/videoplayer/:id" element={<VideoPlayer />} />
+            </Route>
+            <Route path="*" element={<Page404 />} />
+          </Routes>
+          {/* <Footer /> */}
+          <ToastContainer autoClose={2000} newestOnTop closeOnClick />
+        </GoogleOAuthProvider>
       </ThemeProvider>
     </>
   );

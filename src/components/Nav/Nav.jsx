@@ -15,10 +15,11 @@ import React, { useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { Link, NavLink, useLocation, useNavigate } from "react-router-dom";
 import { logoutReducer } from "../../reduxStore/slices/userAuthSlice";
+import { useMediaQuery } from "react-responsive";
 
 export default function Nav() {
+  const isMobile = useMediaQuery({ query: "(max-width: 640px)" });
   let path = useLocation();
-
   let navigate = useNavigate();
   let dispatch = useDispatch();
   const { userInfo } = useSelector((state) => state.userAuth);
@@ -72,19 +73,37 @@ export default function Nav() {
             </NavLink>
           </div>
 
-          <div>
-            {userInfo === null ? (
-              path.pathname !== "/sign-in" ? (
-                <Link to={"/sign-in"}>
-                  <Button variant="contained">Sign In</Button>
-                </Link>
-              ) : null
-            ) : (
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              columnGap: "5px",
+            }}
+          >
+            {!isMobile && (
+              <Link to={"/about"}>
+                <Button
+                  sx={{
+                    boxShadow:
+                      path.pathname === "/sign-in" ||
+                      path.pathname === "/sign-up"
+                        ? "0 0 5px 5px #42a5f5"
+                        : "none",
+                  }}
+                  variant="outlined"
+                >
+                  About
+                </Button>
+              </Link>
+            )}
+
+            {userInfo === null ? null : (
               <>
                 <Link to={"/"}>
                   <Button variant="outlined">Home</Button>
                 </Link>
                 <IconButton
+                  sx={{ padding: 0, margin: 0 }}
                   size="large"
                   aria-label="account of current user"
                   aria-controls="menu-appbar"
@@ -114,10 +133,21 @@ export default function Nav() {
               MenuListProps={{ dense: true }}
               PaperProps={{
                 sx: {
-                  backgroundColor: "#242424", // Set the desired background color
+                  backgroundColor: "#242424",
                 },
               }}
             >
+              {isMobile && (
+                <Link to={"/about"} style={{ textDecoration: "none" }}>
+                  <MenuItem
+                    sx={{ backgroundColor: "#242424", color: "white" }}
+                    onClick={handleAdd}
+                  >
+                    About
+                  </MenuItem>
+                </Link>
+              )}
+
               {userInfo?.isAdmin ? (
                 <MenuItem
                   sx={{ backgroundColor: "#242424", color: "white" }}
